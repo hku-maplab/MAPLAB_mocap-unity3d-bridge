@@ -1,3 +1,8 @@
+Notes:
+----
+
+Doesn't work. Yet. Most videoplayers don't allow a buffer of less than 1 second :(
+
 Requirements:
 ----
 
