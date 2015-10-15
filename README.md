@@ -8,7 +8,7 @@ Repo structure
   Various tools
   
   * unity3d/
-  NatNet-2-Unity executable, Unity3D packages (and source code)
+  NatNet-2-Unity3D executable, Unity3D packages (and source code)
 
   * visualstudio/
   NATNET SDK 2.8 (modified)
