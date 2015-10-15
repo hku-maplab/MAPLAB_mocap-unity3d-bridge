@@ -100,7 +100,7 @@ public class Parser : MonoBehaviour
 					continue;
 				}
 				//Debug.Log("MoCap update for: "+go.name);
-				go.transform.localPosition = position;
+				go.transform.position = position;
 				go.transform.localRotation = orientation;
 			}
 			
@@ -156,7 +156,7 @@ public class Parser : MonoBehaviour
 				if (go == null) {
 					continue;
 				}
-				go.transform.localPosition = position;
+				go.transform.position = position;
 				go.transform.localRotation = orientation;
 			}
 		}
