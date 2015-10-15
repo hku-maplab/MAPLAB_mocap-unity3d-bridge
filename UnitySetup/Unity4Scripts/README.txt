@@ -13,3 +13,8 @@ A QUICK HOWTO
 2. Drag "RigidBodyListener" script onto object you want to control
 3. In the Inspector type the name of the (natnet) rigidbody you want the object to be controlled by
 
+- OPTIONAL: Flip axis
+You may flip an axis of choice (pos and/or quat); select the _NatNet object in your hierarchy and use the toggles in the script's inspector
+
+- TROUBLESHOOTING
+Check the console log for warnings, errors, etc

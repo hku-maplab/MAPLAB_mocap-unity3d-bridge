@@ -15,47 +15,43 @@ public class RigidBodyListener : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		tryToRegister ();
+		// Check rigidBodyName
+		if (rigidBodyName == null || rigidBodyName == "") {
+			Debug.LogError ("RigidBodyListener: (" + gameObject.name + ") rigidBodyName==null");
+			return;
+		}
+		
+		// Check _NatNet obj
+		natNetObj = GameObject.Find ("_NatNet");
+		if (natNetObj == null) {
+			Debug.LogError ("Could not find _NatNet obj?!");
+			return;
+		}
+		
+		// Get Parser
+		natNetParser = (Parser)natNetObj.GetComponent (typeof(Parser));
+		if (natNetParser == null) {
+			Debug.LogError ("Could not find _NatNet obj?!");
+			return;
+		}
+		
+		// only set ready when all checks (above) are okay
+		ready = true;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (!registered) {
-			tryToRegister ();
+		// Only when ready && not registered: try to register
+		if (ready && !registered) {
+			registered = tryToRegister ();
 		}
 	}
 	
 	private bool tryToRegister ()
-	{
-		if (!ready) {
-			// Check rigidBodyName
-			if (rigidBodyName == null) {
-				Debug.LogError ("rigidBodyName==null (" + gameObject.name + ")");
-				return false;
-			}
-			
-			// Check _NatNet obj
-			natNetObj = GameObject.Find ("_NatNet");
-			if (natNetObj == null) {
-				Debug.LogError ("Could not find _NatNet obj?!");
-				return false;
-			}
-			
-			// Get Parser
-			natNetParser = (Parser)natNetObj.GetComponent (typeof(Parser));
-			if (natNetParser == null) {
-				Debug.LogError ("Could not find _NatNet obj?!");
-				return false;
-			}
-			
-			// only once
-			ready = true;
-		}
-		
+	{	
 		if (!registered) {
 			if (natNetParser.requestRigidBodyUpdates (rigidBodyName, gameObject.name)) {
-				registered = true;
 				return true;
 			}
 		}

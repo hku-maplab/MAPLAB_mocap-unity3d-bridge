@@ -32,12 +32,12 @@ using System.Net.Sockets;
 
 
 
-public delegate void PacketReceivedHandler(object sender, string PacketData);
+public delegate void PacketReceivedHandler (object sender,string PacketData);
 
 public class SlipStream : MonoBehaviour
 {
 	public string IP = "127.0.0.1";
-	public int Port  = 16000;
+	public int Port = 16000;
 	
 	public event PacketReceivedHandler PacketNotification;
 	
@@ -46,73 +46,67 @@ public class SlipStream : MonoBehaviour
 	private byte[]     mReceiveBuffer;
 	private string     mPacket;
 	private int        mPreviousSubPacketIndex = 0;
-	private const int  kMaxSubPacketSize       = 1400;
+	private const int  kMaxSubPacketSize = 1400;
 	
-	void Start()
+	void Start ()
 	{
 		mReceiveBuffer = new byte[kMaxSubPacketSize];
-		mPacket        = System.String.Empty;
+		mPacket = System.String.Empty;
 		
-		mRemoteIpEndPoint = new IPEndPoint(IPAddress.Any, Port);
-		mListener = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-		mListener.Bind(mRemoteIpEndPoint);
+		mRemoteIpEndPoint = new IPEndPoint (IPAddress.Any, Port);
+		mListener = new Socket (AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+		mListener.Bind (mRemoteIpEndPoint);
 		
-		mListener.Blocking          = false;
-		mListener.ReceiveBufferSize = 128*1024;
+		mListener.Blocking = false;
+		mListener.ReceiveBufferSize = 128 * 1024;
 	}
  
-	public void UDPRead()
+	public void UDPRead ()
 	{
-		try
-		{
-			int bytesReceived = mListener.Receive(mReceiveBuffer);
+		try {
+			int bytesReceived = mListener.Receive (mReceiveBuffer);
 			
 			int maxSubPacketProcess = 200;
 			
-			while(bytesReceived>0 && maxSubPacketProcess>0)
-			{
+			while (bytesReceived>0 && maxSubPacketProcess>0) {
 				//== ensure header is present ==--
-				if(bytesReceived>=2)
-				{
-					int  subPacketIndex = mReceiveBuffer[0];
-					bool lastPacket     = mReceiveBuffer[1]==1;
+				if (bytesReceived >= 2) {
+					int subPacketIndex = mReceiveBuffer [0];
+					bool lastPacket = mReceiveBuffer [1] == 1;
 					
-					if(subPacketIndex==0)
-					{
+					if (subPacketIndex == 0) {
 						mPacket = System.String.Empty;
 					}
 					
-					if(subPacketIndex==0 || subPacketIndex==mPreviousSubPacketIndex+1)
-					{
-						mPacket += Encoding.ASCII.GetString(mReceiveBuffer, 2, bytesReceived-2);
+					if (subPacketIndex == 0 || subPacketIndex == mPreviousSubPacketIndex + 1) {
+						mPacket += Encoding.ASCII.GetString (mReceiveBuffer, 2, bytesReceived - 2);
 						
 						mPreviousSubPacketIndex = subPacketIndex;
 						
-						if(lastPacket)
-						{
+						if (lastPacket) {
 							//== ok packet has been created from sub packets and is complete ==--
 							
 							//== notify listeners ==--
 							
-							if(PacketNotification!=null)
-								PacketNotification(this, mPacket);
+							if (PacketNotification != null)
+								PacketNotification (this, mPacket);
 						}
 					}			
 				}
 								
-				bytesReceived = mListener.Receive(mReceiveBuffer);
+				bytesReceived = mListener.Receive (mReceiveBuffer);
 
 				//== time this out of packets are coming in faster than we can process ==--
 				maxSubPacketProcess--;
 			}
+		} catch (System.Exception ex) {
+			Debug.LogWarning (ex);
 		}
-		catch(System.Exception ex)
-		{}
 	}
  
-	void Update()
+	void Update ()
 	{
-		UDPRead();
+		UDPRead ();
 	
 	}
 }

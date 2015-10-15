@@ -17,21 +17,26 @@ using System.Xml;
 // the use of this software, even if advised of the possibility of such damage.
 //=============================================================================----
 
-// Attach Body.cs to an empty Game Object and it will parse and create visual
-// game objects based on bone data.  Body.cs is meant to be a simple example 
-// of how to parse and display skeletal data in Unity.
-
-// In order to work properly, this class is expecting that you also have instantiated
-// another game object and attached the Slip Stream script to it.  Alternatively
-// they could be attached to the same object.
+// Modified
 
 public class Parser : MonoBehaviour
 {
 	
 	public GameObject SlipStreamObject;
 	
+	public bool rbFlipPosX = false;
+	public bool rbFlipPosY = false;
+	public bool rbFlipPosZ = false;
+	
+	public bool rbFlipQuatX = false;
+	public bool rbFlipQuatY = false;
+	public bool rbFlipQuatZ = false;
+	public bool rbFlipQuatW = false;
+	
 	private XmlDocument xmlDoc;
 	private XmlDocument xmlRoutes;
+	
+	private bool hasWrittenXmlDoc = false;
 	
 	// Use this for initialization
 	void Start ()
@@ -47,6 +52,13 @@ public class Parser : MonoBehaviour
 	{
 		//Debug.Log ("Parser#OnPacketReceived: " + Packet);
 		xmlDoc.LoadXml (Packet);
+		
+		// Write xml once..
+		
+		if (!hasWrittenXmlDoc) {
+			string filepath = Application.dataPath + @"/NatNetParser-package-dump.xml"; //.dataPath + @"/StreamingAssets/gamexmldata.xml"
+			xmlRoutes.Save (filepath);
+		}
 		
 		//== skeletons ==--
 		
@@ -117,6 +129,29 @@ public class Parser : MonoBehaviour
 			qz = -qz;
 			qw = -qw;
 			
+			//== Flips?
+			if (rbFlipPosX) {
+				x = -x;
+			}
+			if (rbFlipPosY) {
+				y = -y;
+			}
+			if (rbFlipPosZ) {
+				z = -z;
+			}
+			if (rbFlipQuatX) {
+				qx = -qx;
+			}
+			if (rbFlipQuatY) {
+				qy = -qy;
+			}
+			if (rbFlipQuatZ) {
+				qz = -qz;
+			}
+			if (rbFlipQuatW) {
+				qw = -qw;
+			}
+			
 			//== bone pose ==--
 			
 			Vector3 position = new Vector3 (x, y, z);
@@ -172,7 +207,7 @@ public class Parser : MonoBehaviour
 		
 		//xmlRoutes.AppendChild (newELem);
 		
-		string filepath = Application.dataPath + @"/NatNetParser-dump.xml"; //.dataPath + @"/StreamingAssets/gamexmldata.xml"
+		string filepath = Application.dataPath + @"/NatNetParser-routes-dump.xml"; //.dataPath + @"/StreamingAssets/gamexmldata.xml"
 		xmlRoutes.Save (filepath);
 		
 		return true;
