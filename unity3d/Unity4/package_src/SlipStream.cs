@@ -100,7 +100,7 @@ public class SlipStream : MonoBehaviour
 				maxSubPacketProcess--;
 			}
 		} catch (System.Exception ex) {
-			Debug.LogWarning (ex);
+			// Debug.LogWarning (ex);
 		}
 	}
  

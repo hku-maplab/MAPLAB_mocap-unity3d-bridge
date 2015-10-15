@@ -1,0 +1,3 @@
+<RigidBodyTargets>
+  <Jefta_Head rigidbody="Jefta_Head" target="Main Camera" />
+</RigidBodyTargets>

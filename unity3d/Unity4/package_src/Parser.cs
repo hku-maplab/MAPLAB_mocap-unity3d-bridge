@@ -57,7 +57,8 @@ public class Parser : MonoBehaviour
 		
 		if (!hasWrittenXmlDoc) {
 			string filepath = Application.dataPath + @"/NatNetParser-package-dump.xml"; //.dataPath + @"/StreamingAssets/gamexmldata.xml"
-			xmlRoutes.Save (filepath);
+			xmlDoc.Save (filepath);
+			hasWrittenXmlDoc = true;
 		}
 		
 		//== skeletons ==--
@@ -99,8 +100,8 @@ public class Parser : MonoBehaviour
 					continue;
 				}
 				//Debug.Log("MoCap update for: "+go.name);
-				go.transform.position = position;
-				go.transform.rotation = orientation;
+				go.transform.localPosition = position;
+				go.transform.localRotation = orientation;
 			}
 			
 			
@@ -139,18 +140,6 @@ public class Parser : MonoBehaviour
 			if (rbFlipPosZ) {
 				z = -z;
 			}
-			if (rbFlipQuatX) {
-				qx = -qx;
-			}
-			if (rbFlipQuatY) {
-				qy = -qy;
-			}
-			if (rbFlipQuatZ) {
-				qz = -qz;
-			}
-			if (rbFlipQuatW) {
-				qw = -qw;
-			}
 			
 			//== bone pose ==--
 			
@@ -167,8 +156,8 @@ public class Parser : MonoBehaviour
 				if (go == null) {
 					continue;
 				}
-				go.transform.position = position;
-				go.transform.rotation = orientation;
+				go.transform.localPosition = position;
+				go.transform.localRotation = orientation;
 			}
 		}
 	}
