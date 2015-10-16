@@ -1,7 +1,7 @@
 Notes:
 ----
 
-Doesn't work. Yet. Most videoplayers don't allow a buffer of less than 1 second :(
+As of this moment we haven't been able to get a (very) low-latency solution for streaming to a tablet. BUT TeamViewer has! So for now we recommend you install TeamViewer on the tablet and pc and use it to mirror your display :)
 
 Requirements:
 ----
